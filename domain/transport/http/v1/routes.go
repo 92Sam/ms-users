@@ -45,6 +45,8 @@ func (a *Routes) initializeRoutesUsers() {
 
 	// u.Use(middleware.Middleware)
 	u.Path("").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetUsers)
+	u.Path("/{id:[a-z0-9-]+}").Methods(http.MethodDelete).HandlerFunc(a.Controllers.DeleteUserById)
+	u.Path("/{id:[a-z0-9-]+}").Methods(http.MethodPatch).HandlerFunc(a.Controllers.UpdateUserById)
 }
 
 func (a *Routes) initializeRoutesAuth() {

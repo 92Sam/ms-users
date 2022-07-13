@@ -47,7 +47,7 @@ func (ps *UserService) Create(userRequest *serializables.UserRequest) (*models.U
 	return user, nil
 }
 
-func (ps *AuthService) GetUsers() ([]*models.User, error) {
+func (ps *UserService) GetUsers() ([]*models.User, error) {
 	user, err := ps.Repositories.UserRepository.GetUsers()
 	if err != nil {
 		fmt.Errorf("Error ->", err)
@@ -55,4 +55,48 @@ func (ps *AuthService) GetUsers() ([]*models.User, error) {
 	}
 
 	return user, nil
+}
+
+func (ps *UserService) DeleteUserById(id string) (bool, error) {
+	deleted, err := ps.Repositories.UserRepository.DeleteUserById(id)
+	if err != nil {
+		fmt.Errorf("Error ->", err)
+		return false, err
+	}
+
+	return deleted, nil
+}
+
+func (ps *UserService) UpdateUserById(id string, userReq *serializables.UserRequest) (bool, error) {
+	user := &models.User{
+		Id:    id,
+		Email: userReq.Email,
+		Name:  userReq.Name,
+	}
+
+	err := ps.isUserMailExist(userReq.Email)
+	if err != nil {
+		return false, err
+	}
+
+	updated, err := ps.Repositories.UserRepository.UpdateUserById(id, user)
+	if err != nil {
+		fmt.Errorf("Error ->", err)
+		return false, err
+	}
+
+	return updated, nil
+}
+
+func (ps *UserService) isUserMailExist(email string) error {
+
+	user, err := ps.Repositories.UserRepository.GetByEmail(email)
+	if err != nil {
+		fmt.Errorf("Error ->", err)
+	}
+	if user.Email == email {
+		err = fmt.Errorf("User Exist")
+	}
+
+	return err
 }

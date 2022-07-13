@@ -7,9 +7,9 @@ import (
 )
 
 type UserRequest struct {
-	Name     string `json:"name"`
-	Email    string `json:"email"`
-	Password string `json:"password"`
+	Name     string  `json:"name"`
+	Email    string  `json:"email"`
+	Password *string `json:"password"`
 }
 
 type ProductRequest struct {
@@ -30,7 +30,7 @@ type AuthUserSignupRequest struct {
 }
 
 func (ur *UserRequest) PasswordHashed() string {
-	passwordHashed, err := utils.HashPassword(ur.Password)
+	passwordHashed, err := utils.HashPassword(*ur.Password)
 	if err != nil {
 		fmt.Errorf("Error ->", err)
 	}

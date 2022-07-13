@@ -8,11 +8,12 @@ import (
 )
 
 type User struct {
-	Id       string    `json:"id"`
-	Email    string    `json:"email"`
-	Name     string    `json:"name"`
-	Password string    `json:"password"`
-	CreateAt time.Time `json:"createdAt"`
+	Id        string    `json:"id"`
+	Email     string    `json:"email"`
+	Name      string    `json:"name"`
+	Password  string    `json:"password"`
+	CreateAt  time.Time `json:"createdAt"`
+	UpdatedAt time.Time `json:"updatedAt, omitempty"`
 }
 
 func (u *User) CompareHashAndPassword(passwordUncrypted string) error {

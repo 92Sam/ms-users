@@ -70,9 +70,85 @@ func (a *UserController) Signup(w http.ResponseWriter, r *http.Request) {
 }
 
 func (a *UserController) GetUsers(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
 
+	resp, err := a.Services.UserService.GetUsers()
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	dtoResponseList := make([]*serializables.UserResponse, len(resp))
+	for k, v := range resp {
+		dtoResponseList[k] = &serializables.UserResponse{
+			Id:        v.Id,
+			Name:      v.Name,
+			Email:     v.Email,
+			CreatedAt: v.CreateAt,
+		}
+	}
+
+	utils.RespondWithJSON(w, http.StatusOK, dtoResponseList)
+	return
+}
+
+func (a *UserController) GetUsersById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
 	fmt.Println(vars)
-	fmt.Println(r.Body)
-	fmt.Println("USUARIOS METHOD GET")
+
+	p := &serializables.AuthUserSignupRequest{}
+	err := json.NewDecoder(r.Body).Decode(p)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	resp, err := a.Services.AuthService.Signup(p)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	dtoResponse := &serializables.UserResponse{
+		Id:        resp.Id,
+		Name:      resp.Name,
+		Email:     resp.Email,
+		CreatedAt: resp.CreateAt,
+	}
+
+	utils.RespondWithJSON(w, http.StatusCreated, dtoResponse)
+	return
+}
+
+func (a *UserController) DeleteUserById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userId := vars["id"]
+
+	resp, err := a.Services.UserService.DeleteUserById(userId)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	utils.RespondWithJSON(w, http.StatusNoContent, resp)
+	return
+}
+
+func (a *UserController) UpdateUserById(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	userId := vars["id"]
+	p := &serializables.UserRequest{}
+	err := json.NewDecoder(r.Body).Decode(p)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	resp, err := a.Services.UserService.UpdateUserById(userId, p)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	utils.RespondWithJSON(w, http.StatusOK, resp)
+	return
 }

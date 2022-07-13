@@ -63,7 +63,6 @@ func (ps *AuthService) isUserMailExist(email string) error {
 	if err != nil {
 		fmt.Errorf("Error ->", err)
 	}
-	fmt.Println("USER ---->", user)
 	if user.Email == email {
 		err = fmt.Errorf("User Exist")
 	}
