@@ -19,7 +19,6 @@ func main() {
 		case err := <-errChanServer:
 			fmt.Println("Channel Error on server ->", err)
 			panic(err)
-			break
 		case status := <-statusChanServer:
 			fmt.Println("Channel Init Server ->", status)
 		default:

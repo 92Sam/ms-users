@@ -121,6 +121,8 @@ func (ur *UserRepository) GetUsersById(id string) (*models.User, error) {
 		return nil, err
 	}
 
+	fmt.Println("usuario", result.Item)
+
 	var records *models.User
 	err = attributevalue.UnmarshalMap(result.Item, &records)
 	if err != nil {

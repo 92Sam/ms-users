@@ -57,6 +57,17 @@ func (ps *UserService) GetUsers() ([]*models.User, error) {
 	return user, nil
 }
 
+func (ps *UserService) GetUsersById(id string) (*models.User, error) {
+	fmt.Println("GetUsersById")
+	user, err := ps.Repositories.UserRepository.GetUsersById(id)
+	if err != nil {
+		fmt.Errorf("Error ->", err)
+		return nil, err
+	}
+
+	return user, nil
+}
+
 func (ps *UserService) DeleteUserById(id string) (bool, error) {
 	deleted, err := ps.Repositories.UserRepository.DeleteUserById(id)
 	if err != nil {

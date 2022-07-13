@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"encoding/json"
-	"fmt"
 	"net/http"
 
 	"github.com/92Sam/ms-users/domain/serializables"
@@ -93,19 +92,15 @@ func (a *UserController) GetUsers(w http.ResponseWriter, r *http.Request) {
 
 func (a *UserController) GetUsersById(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
-	fmt.Println(vars)
+	userId := vars["id"]
 
-	p := &serializables.AuthUserSignupRequest{}
-	err := json.NewDecoder(r.Body).Decode(p)
+	resp, err := a.Services.UserService.GetUsersById(userId)
 	if err != nil {
 		utils.RespondWithError(w, http.StatusBadRequest, err)
 		return
 	}
-
-	resp, err := a.Services.AuthService.Signup(p)
-	if err != nil {
-		utils.RespondWithError(w, http.StatusBadRequest, err)
-		return
+	if resp == nil {
+		utils.RespondWithError(w, http.StatusNoContent, nil)
 	}
 
 	dtoResponse := &serializables.UserResponse{
