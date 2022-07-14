@@ -9,7 +9,8 @@ import (
 )
 
 type Routes struct {
-	Router *mux.Router
+	Router   *mux.Router
+	RouterV1 *mux.Router
 	*controllers.Controllers
 }
 
@@ -17,7 +18,16 @@ func NewRoutes(router *mux.Router, ctrl *controllers.Controllers) {
 	a := new(Routes)
 	a.Router = router
 	a.Controllers = ctrl
+	a.initRoutesV1()
+}
 
+func (a *Routes) initRoutesV1() {
+	a.RouterV1 = a.Router.NewRoute().Methods(
+		http.MethodPost,
+		http.MethodGet,
+		http.MethodDelete,
+		http.MethodPut,
+		http.MethodPatch).PathPrefix("/v1").Subrouter()
 	a.initializeRoutesProducts()
 	a.initializeRoutesUsers()
 	a.initializeRoutesAuth()
@@ -26,9 +36,9 @@ func NewRoutes(router *mux.Router, ctrl *controllers.Controllers) {
 func (a *Routes) initializeRoutesProducts() {
 
 	fmt.Println("Init Routes Products")
-	a.Router.Path("/productsfree").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProductFree)
+	a.RouterV1.Path("/productsfree").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProductFree)
 
-	u := a.Router.PathPrefix("/products-commission").Subrouter()
+	u := a.RouterV1.PathPrefix("/products-commission").Subrouter()
 	// u.Use(middlewares)
 	u.Path("/products").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProduct)
 
@@ -41,7 +51,7 @@ func (a *Routes) initializeRoutesProducts() {
 
 func (a *Routes) initializeRoutesUsers() {
 	fmt.Println("Init Routes Users")
-	u := a.Router.PathPrefix("/users").Subrouter()
+	u := a.RouterV1.PathPrefix("/users").Subrouter()
 
 	// u.Use(middleware.Middleware)
 	u.Path("").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetUsers)
@@ -53,7 +63,7 @@ func (a *Routes) initializeRoutesUsers() {
 func (a *Routes) initializeRoutesAuth() {
 	fmt.Println("Init Routes Auth")
 
-	u := a.Router.PathPrefix("/auth").Subrouter()
+	u := a.RouterV1.PathPrefix("/auth").Subrouter()
 	u.Path("/login").Methods(http.MethodPost).HandlerFunc(a.Controllers.Login)
 	u.Path("/signup").Methods(http.MethodPost).HandlerFunc(a.Controllers.Signup)
 }

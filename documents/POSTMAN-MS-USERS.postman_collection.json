@@ -7,123 +7,235 @@
 	},
 	"item": [
 		{
-			"name": "users",
+			"name": "V1",
 			"item": [
 				{
-					"name": "GetUsers",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{HOST}}/productsfree",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"productsfree"
-							]
+					"name": "Users",
+					"item": [
+						{
+							"name": "GetUsers",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST_V1}}/users",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetUserById",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST_V1}}/users/:id",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5c793f37-af3e-49e5-a62f-80c83d525450"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteUserById",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "{{HOST_V1}}/users/:id",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "5c793f37-af3e-49e5-a62f-80c83d525450"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "UpdateUserById",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"samdev4f52ss@fma.com\",\n    \"name\":\"Samuel userUpdated\",\n    \"password\":\"password1234567\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HOST}}/users/:id",
+									"host": [
+										"{{HOST}}"
+									],
+									"path": [
+										"users",
+										":id"
+									],
+									"variable": [
+										{
+											"key": "id",
+											"value": "530e38fb-3083-4559-b594-1b506ed2b14f"
+										}
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Products",
-			"item": [
-				{
-					"name": "GetFreeProducts",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{HOST}}/productsfree",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"productsfree"
-							]
-						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "GetProducts",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{HOST}}/products-commission/products",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"products-commission",
-								"products"
-							]
-						}
-					},
-					"response": []
-				}
-			]
-		},
-		{
-			"name": "Auth",
-			"item": [
-				{
-					"name": "Login",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\":\"samdev@fma.com\",\n    \"password\":\"jhdasjkdhjasdkads\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Auth",
+					"item": [
+						{
+							"name": "Login",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"userDeveloper3ss4@fma.com\",\n    \"password\":\"password1234567\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HOST_V1}}/auth/login",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"auth",
+										"login"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{HOST}}/auth/login",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"auth",
-								"login"
-							]
+						{
+							"name": "Signup",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"userDeveloper3ss4@fma.com\",\n    \"name\":\"Samuel\",\n    \"password\":\"password1234567\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HOST_V1}}/auth/signup",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"auth",
+										"signup"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				},
 				{
-					"name": "Signup",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\n    \"email\":\"samdevSsX@fma.com\",\n    \"name\":\"sam\",\n    \"password\":\"jhdasjkdhjasdkads\"\n}",
-							"options": {
-								"raw": {
-									"language": "json"
+					"name": "Products",
+					"item": [
+						{
+							"name": "GetFreeProducts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST_V1}}/productsfree",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"productsfree"
+									]
 								}
-							}
+							},
+							"response": []
 						},
-						"url": {
-							"raw": "{{HOST}}/auth/signup",
-							"host": [
-								"{{HOST}}"
-							],
-							"path": [
-								"auth",
-								"signup"
-							]
+						{
+							"name": "GetProducts",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{HOST_V1}}/products-commission/products",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"products-commission",
+										"products"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "CreateUser",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\n    \"email\":\"samdev@fma.com\",\n    \"name\":\"sam\",\n    \"password\":\"jhdasjkdhjasdkads\"\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{HOST_V1}}/users",
+									"host": [
+										"{{HOST_V1}}"
+									],
+									"path": [
+										"users"
+									]
+								}
+							},
+							"response": []
 						}
-					},
-					"response": []
+					]
 				}
 			]
 		}
@@ -150,12 +262,27 @@
 	],
 	"variable": [
 		{
-			"key": "HOST",
+			"key": "HOST_V1",
 			"value": "",
 			"type": "string"
 		},
 		{
 			"key": "PORT",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "API_V1",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "HOST_V2",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "API_V2",
 			"value": "",
 			"type": "string"
 		}
