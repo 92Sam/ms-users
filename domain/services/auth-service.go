@@ -10,11 +10,16 @@ import (
 	"github.com/google/uuid"
 )
 
+type IAuthService interface {
+	Login(request *serializables.AuthUserLoginRequest) (*models.User, error)
+	Signup(request *serializables.AuthUserSignupRequest) (*models.User, error)
+}
+
 type AuthService struct {
 	*repositories.Repositories
 }
 
-func NewAuthService(reps *repositories.Repositories) *AuthService {
+func NewAuthService(reps *repositories.Repositories) IAuthService {
 	return &AuthService{reps}
 }
 

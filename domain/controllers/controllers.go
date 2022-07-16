@@ -1,6 +1,11 @@
 package controllers
 
 type Controllers struct {
-	*ProductController
-	*UserController
+	IProductController
+	IAuthUserController
+}
+
+type IAuthUserController interface {
+	IUserController
+	IAuthController
 }

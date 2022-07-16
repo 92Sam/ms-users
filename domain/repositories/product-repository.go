@@ -12,19 +12,15 @@ import (
 	"github.com/google/uuid"
 )
 
-type Product interface {
-	Create(models.Product) (models.Product, error)
-	GetAll() ([]models.Product, error)
-	GetById(id string) (models.Product, error)
-	Update(id string) (models.Product, error)
-	Delete(id string) error
+type IProductRepository interface {
+	Create(productModel *models.Product) (*models.Product, error)
 }
 
 type ProductRepository struct {
 	*persistence.DynamoDbContext
 }
 
-func NewProductRepository(dynamoPersistence *persistence.DynamoDbContext) *ProductRepository {
+func NewProductRepository(dynamoPersistence *persistence.DynamoDbContext) IProductRepository {
 	return &ProductRepository{
 		dynamoPersistence,
 	}

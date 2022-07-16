@@ -12,20 +12,20 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/dynamodb/types"
 )
 
-type User interface {
-	Create(models.User) (*models.User, error)
-	GetAll() ([]models.User, error)
-	GetById(id string) (*models.User, error)
+type IUserRepository interface {
+	Create(userModel *models.User) (*models.User, error)
 	GetByEmail(email string) (*models.User, error)
-	Update(id string) (*models.User, error)
-	Delete(id string) error
+	GetUsers() ([]*models.User, error)
+	DeleteUserById(id string) (bool, error)
+	GetUsersById(id string) (*models.User, error)
+	UpdateUserById(id string, user *models.User) (bool, error)
 }
 
 type UserRepository struct {
 	*persistence.DynamoDbContext
 }
 
-func NewUserRepository(dynamoPersistence *persistence.DynamoDbContext) *UserRepository {
+func NewUserRepository(dynamoPersistence *persistence.DynamoDbContext) IUserRepository {
 	return &UserRepository{
 		dynamoPersistence,
 	}

@@ -1,6 +1,6 @@
 package repositories
 
 type Repositories struct {
-	*ProductRepository
-	*UserRepository
+	ProductRepository IProductRepository
+	UserRepository    IUserRepository
 }

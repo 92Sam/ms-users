@@ -5,24 +5,23 @@ import (
 	"net/http"
 
 	"github.com/92Sam/ms-users/domain/controllers"
+	"github.com/92Sam/ms-users/domain/transport/http/v1/middlewares"
 	"github.com/gorilla/mux"
 )
 
 type Routes struct {
-	Router   *mux.Router
 	RouterV1 *mux.Router
 	*controllers.Controllers
 }
 
 func NewRoutes(router *mux.Router, ctrl *controllers.Controllers) {
 	a := new(Routes)
-	a.Router = router
 	a.Controllers = ctrl
-	a.initRoutesV1()
+	a.initRoutesV1(router)
 }
 
-func (a *Routes) initRoutesV1() {
-	a.RouterV1 = a.Router.NewRoute().Methods(
+func (a *Routes) initRoutesV1(router *mux.Router) {
+	a.RouterV1 = router.NewRoute().Methods(
 		http.MethodPost,
 		http.MethodGet,
 		http.MethodDelete,
@@ -38,15 +37,13 @@ func (a *Routes) initializeRoutesProducts() {
 	fmt.Println("Init Routes Products")
 	a.RouterV1.Path("/productsfree").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProductFree)
 
-	u := a.RouterV1.PathPrefix("/products-commission").Subrouter()
-	// u.Use(middlewares)
-	u.Path("/products").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProduct)
-
-	// a.Router.HandleFunc("/products", a.getProducts).Methods("GET")
-	// a.Router.HandleFunc("/product", a.createProduct).Methods("POST")
-	// a.Router.HandleFunc("/product/{id:[0-9]+}", a.getProduct).Methods("GET")
-	// a.Router.HandleFunc("/product/{id:[0-9]+}", a.updateProduct).Methods("PUT")
-	// a.Router.HandleFunc("/product/{id:[0-9]+}", a.deleteProduct).Methods("DELETE")
+	u := a.RouterV1.PathPrefix("/products").Subrouter()
+	u.Use(middlewares.MiddlewareUser)
+	u.Path("").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProduct)
+	u.Path("").Methods(http.MethodPost).HandlerFunc(a.Controllers.CreateProduct)
+	u.Path("/{id:[a-z0-9-]+}").Methods(http.MethodGet).HandlerFunc(a.Controllers.GetProductById)
+	u.Path("/{id:[a-z0-9-]+}").Methods(http.MethodPatch).HandlerFunc(a.Controllers.UpdateProductById)
+	u.Path("/{id:[a-z0-9-]+}").Methods(http.MethodDelete).HandlerFunc(a.Controllers.GetProductById)
 }
 
 func (a *Routes) initializeRoutesUsers() {

@@ -14,7 +14,16 @@ type UserService struct {
 	*repositories.Repositories
 }
 
-func NewUserService(reps *repositories.Repositories) *UserService {
+type IUserService interface {
+	GetUserByEmail(loginRequest *serializables.AuthUserLoginRequest) (*models.User, error)
+	Create(userRequest *serializables.UserRequest) (*models.User, error)
+	GetUsers() ([]*models.User, error)
+	GetUsersById(id string) (*models.User, error)
+	DeleteUserById(id string) (bool, error)
+	UpdateUserById(id string, userReq *serializables.UserRequest) (bool, error)
+}
+
+func NewUserService(reps *repositories.Repositories) IUserService {
 	return &UserService{reps}
 }
 

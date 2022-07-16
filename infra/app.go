@@ -54,8 +54,8 @@ func (a *App) initServices() {
 
 func (a *App) initControllers() {
 	ctr := new(controllers.Controllers)
-	ctr.ProductController = controllers.NewProductController(a.Services)
-	ctr.UserController = controllers.NewUserController(a.Services)
+	ctr.IProductController = controllers.NewProductController(a.Services)
+	ctr.IAuthUserController = controllers.NewUserController(a.Services)
 	a.Controllers = ctr
 }
 
