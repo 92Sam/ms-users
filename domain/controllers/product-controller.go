@@ -1,10 +1,13 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"net/http"
 
+	"github.com/92Sam/ms-users/domain/serializables"
 	"github.com/92Sam/ms-users/domain/services"
+	"github.com/92Sam/ms-users/utils"
 	"github.com/gorilla/mux"
 )
 
@@ -50,15 +53,43 @@ func (a *ProductController) GetProductFree(w http.ResponseWriter, r *http.Reques
 }
 
 func (a *ProductController) GetProduct(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Print(vars)
-	fmt.Println("GetProduct")
+
+	produtList, err := a.Services.ProductService.GetProducts()
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	utils.RespondWithJSON(w, http.StatusOK, produtList)
+	return
 }
 
 func (a *ProductController) CreateProduct(w http.ResponseWriter, r *http.Request) {
-	vars := mux.Vars(r)
-	fmt.Print(vars)
-	fmt.Println("CreateProduct")
+	p := &serializables.ProductRequest{}
+	err := json.NewDecoder(r.Body).Decode(p)
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	product, err := a.Services.ProductService.Create(p)
+	if err != nil {
+		utils.RespondWithError(w, http.StatusBadRequest, err)
+		return
+	}
+
+	// dtoResponseList := make([]*serializables.UserResponse, len(resp))
+	// for k, v := range resp {
+	// 	dtoResponseList[k] = &serializables.UserResponse{
+	// 		Id:        v.Id,
+	// 		Name:      v.Name,
+	// 		Email:     v.Email,
+	// 		CreatedAt: v.CreateAt,
+	// 	}
+	// }
+
+	utils.RespondWithJSON(w, http.StatusOK, product)
+	return
 }
 
 func (a *ProductController) GetProductById(w http.ResponseWriter, r *http.Request) {

@@ -13,9 +13,9 @@ type UserRequest struct {
 }
 
 type ProductRequest struct {
-	Name        string `json:"name"`
-	Description string `json:"description, omitempty"`
-	Rating      int8   `json:"rating"`
+	Name        string  `json:"name"`
+	Description *string `json:"description", omitempty`
+	Rating      int8    `json:"rating", omitempty`
 }
 
 type AuthUserLoginRequest struct {

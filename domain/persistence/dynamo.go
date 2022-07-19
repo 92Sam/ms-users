@@ -21,13 +21,11 @@ type DynamoTable int
 // TABLES Enum
 const (
 	USERS DynamoTable = iota
-	PRODUCTS
 )
 
 func (tableIndx DynamoTable) GetTableNamePtr() *string {
 	return aws.String([]string{
 		"users",
-		"products",
 	}[tableIndx])
 }
 

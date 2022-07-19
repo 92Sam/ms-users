@@ -16,15 +16,21 @@ type App struct {
 	*repositories.Repositories
 	*controllers.Controllers
 	*services.Services
+	*AppPersistence
+}
+
+type AppPersistence struct {
+	*persistence.DynamoDbContext
+	*persistence.Neo4jDbContext
 }
 
 func InitApp(errChanServer chan error, statusChanServer chan bool) {
 	a := new(App)
 	a.Router = mux.NewRouter()
 	ctx := context.Background()
-	dynamoDb := initPersistence(ctx)
 
-	a.initRepositories(dynamoDb)
+	a.initPersistence(ctx)
+	a.initRepositories()
 	a.initServices()
 	a.initControllers()
 	a.initRoutes()
@@ -37,10 +43,10 @@ func (a *App) initRoutes() {
 	v1.NewRoutes(a.Router, a.Controllers)
 }
 
-func (a *App) initRepositories(dynamoSvc *persistence.DynamoDbContext) {
+func (a *App) initRepositories() {
 	repo := new(repositories.Repositories)
-	repo.ProductRepository = repositories.NewProductRepository(dynamoSvc)
-	repo.UserRepository = repositories.NewUserRepository(dynamoSvc)
+	repo.ProductRepository = repositories.NewProductRepository(a.Neo4jDbContext)
+	repo.UserRepository = repositories.NewUserRepository(a.DynamoDbContext)
 	a.Repositories = repo
 }
 
@@ -59,6 +65,9 @@ func (a *App) initControllers() {
 	a.Controllers = ctr
 }
 
-func initPersistence(ctx context.Context) *persistence.DynamoDbContext {
-	return persistence.InitDynamoDb(ctx)
+func (a *App) initPersistence(ctx context.Context) {
+	a.AppPersistence = &AppPersistence{
+		persistence.InitDynamoDb(ctx),
+		persistence.InitNeo4jDb(),
+	}
 }
